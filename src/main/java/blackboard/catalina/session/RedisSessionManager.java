@@ -157,7 +157,7 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle, Redis
 
 		initializeDatabaseConnection();
 		setDistributable(true);
-		managerId = generateSessionId();
+		managerId = "redisSessionManager";
 	}
 
 	/**
@@ -259,18 +259,7 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle, Redis
 
 	@Override
 	public void remove(final Session session, boolean update) {
-		super.remove(session, update);
-
-		log.info("Removing session ID : " + session.getId());
-
-		execute(new SessionOperation() {
-
-			@Override
-			public void execute(Jedis jedis) {
-				jedis.del(getSessionKey(session.getId()));
-			}
-
-		});
+		//El redis se encarga de expirar las sesiones
 	}
 
 	void returnConnection(Jedis jedis, boolean error) {
