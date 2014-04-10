@@ -241,14 +241,13 @@ public class RedisSessionManager extends ManagerBase implements Lifecycle, Redis
 	}
 
 	void saveSession(Session session) {
-		log.info("Saving session " + session + " into Redis");
-
 		final RedisSession redisSession = (RedisSession) session;
 		if (redisSession.isDirty()) {
 			execute(new SessionOperation() {
 
 				@Override
 				public void execute(Jedis jedis) throws Exception {
+					log.info("Saving session " + redisSession + " into Redis");
 					jedis.set(getSessionKey(redisSession.getId()), serializer.writeSession(redisSession));
 					redisSession.resetDirtyTracking();
 				}
